@@ -532,6 +532,28 @@ setInterval(async () => {
   } catch (error) {
     console.error('❌ Error general en sistema de renovación:', error);
   }
+
+  // Script de limpieza - ejecutar UNA VEZ
+const tareasAsociaciones = require('./Esquemas/tareasAsociaciones.js');
+
+async function limpiarDuplicados() {
+  const tareas = await tareasAsociaciones.find({});
+  const canalesVistos = new Set();
+  let eliminadas = 0;
+
+  for (const tarea of tareas) {
+    if (canalesVistos.has(tarea.channelId)) {
+      await tareasAsociaciones.deleteOne({ _id: tarea._id });
+      eliminadas++;
+    } else {
+      canalesVistos.add(tarea.channelId);
+    }
+  }
+
+  console.log(`🧹 Limpieza completada: ${eliminadas} tareas duplicadas eliminadas`);
+}
+
+limpiarDuplicados();
 }, 10 * 60 * 1000); // Cada 10 minutos
 
 const tagRoleManager = require("./Funciones/tagRole");
