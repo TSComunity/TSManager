@@ -19,7 +19,7 @@ async execute(member, client) {
   const embed = new EmbedBuilder()
       .setColor('Blue')
       .setTitle(`¡${displayName} acaba de unirse a ${guild.name}!`)
-      .setURL('https://tscomunityweb.vercel.app/')
+      .setURL('https://github.com/TSComunity')
       .setThumbnail(member.user.displayAvatarURL())
       .addFields(
           { name: '<:verificacion:1362849933019058449> Verificación', value: `<#1112754769472270449>`, inline: true },
@@ -34,6 +34,7 @@ async execute(member, client) {
       .setCustomId(`saludar-${member.user.id}`)
       .setEmoji('👋')
       .setLabel('¡Saludar!')
+      .setDisbled(true)
       .setStyle(ButtonStyle.Secondary)
 
   const row = new ActionRowBuilder()
