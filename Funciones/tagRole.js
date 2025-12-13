@@ -10,7 +10,6 @@ const GUILD_ID = "1093864130030612521";
 // Función principal
 async function tagRoleManager(client, logChannelId) {
   const guild = await client.guilds.fetch(GUILD_ID);
-  const logChannel = await client.channels.fetch(logChannelId);
 
   while (true) {
     try {
@@ -31,25 +30,11 @@ async function tagRoleManager(client, logChannelId) {
           if (hasTag && !hasRole) {
             await member.roles.add(ROLE_ID);
 
-            const embed = new EmbedBuilder()
-              .setTitle("🏷️ Usuario con etiqueta TS encontrado")
-              .addFields(
-                { name: "Usuario", value: `<@${data.id}> (${data.global_name || member.user.username})`, inline: false },
-                { name: "Tag", value: primaryGuild.tag, inline: true },
-                { name: "Servidor (ID)", value: primaryGuild.identity_guild_id, inline: true },
-                { name: "Badge Hash", value: primaryGuild.badge || "No disponible", inline: false },
-                { name: "Activo", value: primaryGuild.identity_enabled ? "Sí" : "No", inline: true }
-              )
-              .setThumbnail(`https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`)
-              .setColor("Blurple");
-
-            await logChannel.send({ embeds: [embed] });
           }
 
           // Quitar rol si ya no tiene la etiqueta
           if (!hasTag && hasRole) {
-            await member.roles.remove(ROLE_ID);
-            await logChannel.send(`❌ Se quitó el rol a <@${member.id}> por no tener la etiqueta "${TAG}".`);
+            await member.roles.remove(ROLE_ID)
           }
 
         } catch (err) {
@@ -59,11 +44,8 @@ async function tagRoleManager(client, logChannelId) {
         await sleep(3000); // Espera entre usuarios
       }
 
-      await logChannel.send("🔁 Ciclo de verificación completado. Esperando antes del siguiente... <@817515739711406140>");
-
     } catch (error) {
       console.error("Error en el ciclo de tagRoleManager:", error);
-      await logChannel.send("⚠️ Hubo un error durante el ciclo de verificación.");
     }
 
     await sleep(1000 * 60 * 10); // Espera 10 minutos antes de repetir el ciclo
